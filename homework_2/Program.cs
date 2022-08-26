@@ -51,7 +51,7 @@ void ExTwo(int num, int pos)
 7 -> да
 1 -> нет */
 
-void ExThree (int num)
+void ExThree (int num) // просто проверкой было бы проще, но возникла такая идея пробежкой через цикл
 {
     for (int i = 1 ; i <= 5 ; i++) {
         if (i == num) {
@@ -142,7 +142,7 @@ while (true)
     if (a == 1)
     {
         Console.WriteLine("---Exercise One---");
-        Console.WriteLine("Напишите программу, которая принимает на вход трёхзначное число и на выходе показывает вторую цифру этого числа.\n");
+        Console.WriteLine("Напишите программу, которая принимает на вход трёхзначное число и на выходе показывает вторую цифру этого числа.");
         Console.Write("Please, insert 3-digit number: ");
         ExOne(Convert.ToInt32(Console.ReadLine()));
         Console.WriteLine("---End of Exercise---\n");
@@ -151,7 +151,7 @@ while (true)
     else if (a == 2)
     {
         Console.WriteLine("---Exercise Two---");
-        Console.WriteLine("Напишите программу, которая выводит третью цифру заданного числа или сообщает, что третьей цифры нет.\n");
+        Console.WriteLine("Напишите программу, которая выводит третью цифру заданного числа или сообщает, что третьей цифры нет.");
         Console.Write("Please, insert any-digit number: ");
         ExTwo(Convert.ToInt32(Console.ReadLine()), 3);
         Console.WriteLine("---End of Exercise---\n");
@@ -161,7 +161,7 @@ while (true)
     else if (a == 3)
     {
         Console.WriteLine("---Exercise Three---");
-        Console.WriteLine("Напишите программу, которая принимает на вход цифру, обозначающую день недели, и проверяет, является ли этот день выходным.\n");
+        Console.WriteLine("Напишите программу, которая принимает на вход цифру, обозначающую день недели, и проверяет, является ли этот день выходным.");
         Console.Write("Please, insert any number you'd like to check for beeing a weekday number: ");
         ExThree(Convert.ToInt32(Console.ReadLine()));
         Console.WriteLine("---End of Exercise---\n");
@@ -171,7 +171,7 @@ while (true)
     else if (a == 4)
     {
         Console.WriteLine("---Exercise Four---");
-        Console.WriteLine("Напишите программу, считывающую с пользовательского ввода целое число n (неотрицательное), выводящее это число в консоль вместе с правильным образом изменённым словом 'программист'.\n");
+        Console.WriteLine("Напишите программу, считывающую с пользовательского ввода целое число n (неотрицательное), выводящее это число в консоль вместе с правильным образом изменённым словом 'программист'.");
         Console.Write("Please, number of coders: ");
         ExFour(Convert.ToInt32(Console.ReadLine()));
         Console.WriteLine("---End of Exercise---\n");
