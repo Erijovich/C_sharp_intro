@@ -125,16 +125,15 @@ void ExOne()
     Console.Write("Введите первое число число: ");
 
     int [][] megaArray = new int [30][]; //примерно 4 млрд чисел, думаю, хватит. Однако хз, как сделать потенциально бесконечный ввод,
-    megaArray [0] = new int [8]; //начнём с 8-ми элементов и будем удваивать при заполнении. 
+    megaArray [0] = new int [2]; //начнём с 8-ми элементов и будем удваивать при заполнении. 
 
     string nextInput = string.Empty,
            exeptionMessage = "!Работаем только с целыми числами, введите или число или пустую строку для завершения ввода (ctrl+c для экстренного прерывания)!";
 
-    int nextNumber = 0, 
-        counter = 0, 
-        currentPositionIndex = 0,
-        currentArrayIndex = 0, 
-        currentMaxIndex = megaArray[currentArrayIndex].Length;
+    int currentPositionIndex = 0,
+        currentArrayNumber = 0, 
+        currentMaxIndex = megaArray[currentArrayNumber].Length;
+       ////---------*  Console.WriteLine("max index now= " + currentMaxIndex);
 
     while (true) 
     {        
@@ -142,18 +141,30 @@ void ExOne()
         // здесь проверяем сначала номер индекса
         // затем если надо создаем массив
         // затем перекопируем данные
-        nextInput = Console.ReadLine();
-        if (nextInput == "") 
-        {
-            Console.WriteLine("Вы завершили ввод чисел.");
-            break;
-        }
+        nextInput = Console.ReadLine(); // сначала считываем строковое значение, проверям,
+                                        // является ли пустой строкой и либо заканчиваем, 
+                                        // либо уже остальные проверки мутим
+        if (nextInput == "") break; // выходим из цикла While
         else
         {          
             try 
-            {
-               // nextNumber = Convert.ToInt32(nextInput);
-                megaArray [currentArrayIndex] [currentPositionIndex] = Convert.ToInt32(nextInput);
+            {                
+                /////----- nextNumber = Convert.ToInt32(nextInput);
+               // Console.WriteLine("currentPositionIndex = " + currentPositionIndex); // отладка
+                if (currentMaxIndex == currentPositionIndex+1) // как только текущий массив заполняется
+                                                               // мы перекидываем все числа из него в следующий
+                                                               // в два раза больший массив и продолжаем работу
+                {
+                    Console.WriteLine("текущее максимальное кол-во элементов в массиве = " + currentMaxIndex); // отладка
+                    megaArray [currentArrayNumber+1] = new int [currentMaxIndex*2];
+
+                    for (int i = 0; i < megaArray[currentArrayNumber].Length; i++)
+                        megaArray[currentArrayNumber+1][i] = megaArray[currentArrayNumber][i];
+
+                    currentMaxIndex *= 2; //следующий массив в два раз больше
+                    currentArrayNumber++;
+                }
+                megaArray [currentArrayNumber] [currentPositionIndex] = Convert.ToInt32(nextInput);
                 currentPositionIndex++;
             }
             catch
@@ -163,39 +174,26 @@ void ExOne()
         }     
         Console.Write("Введите следующее число: ");           
     } 
-    // в конце концов создаем нужный массив
-    // и уже деелаем все выводы
 
+    Console.Write($"\nВы завершили ввод {currentPositionIndex} чис{EndingChanger(currentPositionIndex,"ла","ел","ел")}. ");
 
+    int [] numbersList = new int [currentPositionIndex]; // наконец, мы создаём массив 
+    for (int i = 0; i < currentPositionIndex; i++)
+                        numbersList[i] = megaArray[currentArrayNumber][i];
 
+    string list = string.Join(", ", numbersList);
+    Console.WriteLine($"Все введённые числа:\n[{list}]"); 
 
-
-
-/*     int n = 0;
-    while (true) // защита от ввода отрицательной размерности массива
-    {
-        Console.Write("Задайте размерность массива: ");
-        n = InputChecker();
-        if (n < 0) Console.WriteLine("Так не получится... размерность массива должна быть натуральным числом... ");
-        else break;
-    }
-    int[] a = CreateArray(n, 100, 1000); // создаём массив и выводим его на экран
-    string list = string.Join(", ", a);
+    // собственно сама задача... ))
     
-    Console.WriteLine($"Созданный массив:\n[{list}]"); 
-
-    int count = 0;
-    for (int i = 0; i < a.Length; i++)
-        if (a[i]%2 == 0) count++;
-    
-     Console.WriteLine($"В этом массиве {count}"                            // вывод количества чётных чисел
-                     + $" чётн{EndingChanger(count, "ое", "ых", "ых")}"     // ееее! используем окончания))
-                     + $" чис{EndingChanger(count, "ло", "ла", "ел")}");  */
-}
+    int counter = 0; // счётчик наших чисел
+    for (int i = 0; i < numbersList.Length; i++)
+        if (numbersList[i]>0) counter++;   
+       
 
 void DynamicArray ()
 {
-
+    
 }
 
 void ExTwo()
