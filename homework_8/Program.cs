@@ -266,8 +266,8 @@ void TableMaxMinSort (int[,] table)
 }
 
 int Rows (int[,] table) => table.GetLength(0); // не плодите лишних сущностей, хехе...
-int Cols (int[,] table) => table.GetLength(1); // ....
-int Layers (int[,] table) => table.GetLength(2);
+int Cols (int[,] table) => table.GetLength(1); // .... но так намного читабельнее для меня...
+
 
 void FillIntUnikRandom()
 {
@@ -429,8 +429,106 @@ void ExFour() // Сформируйте трёхмерный массив из �
 
 void ExFive() // Напишите программу, которая заполнит спирально массив 4 на 4.
 {
+    int rows = 0, cols = 0;
+    string exeptionMessage = "Только натуральные числа!";
+
+    Console.WriteLine("Задайте размерность матрицы.");
+    rows = NaturalInputChecker("Укажите кол-во строк: " , exeptionMessage);
+    cols = NaturalInputChecker("Укажите кол-во столбцов: " , exeptionMessage);
+    int[,] table = new int[rows,cols];
+
+
+    int power = rows*cols; // мощность таблицы
+    int direction = 1, // 1 - направо, 2 - вниз, 3 - налево, 4 - вверх
+        currentRow = 0,
+        currentCol = 0;
+
+   
+
+    int i = 1;
+    while (i <= rows*cols)
+    {
+        switch (direction)
+        {
+            case 1: 
+            {
+                if (currentCol < Cols(table) & table[currentRow,currentCol] == 0) 
+                    {
+                        table[currentRow,currentCol] = i;
+                        i++;
+                        if (currentCol < Cols(table)-1) currentCol++;
+                        else { currentRow++; direction++;}                        
+                    }
+            
+                else direction++;
+                PrintIntTable(table);
+                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                break;
+            }
+            case 2:
+            {
+                if (currentRow < Rows(table) & table[currentRow,currentCol] == 0) 
+                {
+                    table[currentRow,currentCol] = i;
+                    i++;
+                    if (currentRow < Rows(table)-1) currentRow++;
+                    else { currentCol--; direction++;}
+                }
+                else direction++;
+                PrintIntTable(table);
+                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                break;
+
+            }
+            case 3:
+            {
+                if (currentCol >= 0 & table[currentRow,currentCol] == 0) 
+                {
+                    table[currentRow,currentCol] = i;
+                    i++;
+                    if (currentCol > 0) currentCol--;
+                    else { currentRow--; direction++;}  
+                }
+                else direction++;
+                PrintIntTable(table);
+                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                break;
+
+            }
+            case 4:
+            {
+                if (currentRow >= 0 & table[currentRow,currentCol] == 0) 
+                {
+                    table[currentRow,currentCol] = i;
+                    i++;
+                    if (currentRow > 0) currentRow--;
+                    else { currentCol++; direction++;}
+                }
+                else direction++;
+                PrintIntTable(table);
+                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                break;
+
+            }
+            default:
+            {
+                direction = 1;
+                break;
+            }
+          
+
+        }
+       
+    }
+
+    
+        PrintIntTable(table);
+    
+
+ 
 
 }
+
 void ExSix() // Сгенерировать массив случайных целых чисел размерностью m*n (размерность вводим с клавиатуры).
              // Вывести на экран красивенько таблицей. Перемешать случайным образом элементы массива,
              // причем чтобы каждый гарантированно переместился на другое место (возможно для этого
@@ -440,7 +538,7 @@ void ExSix() // Сгенерировать массив случайных це�
 {
 
 }
-void ExSeven() //Пользователь вводит с клавиатуры M чисел. Посчитайте, сколько чисел больше 0 ввёл пользователь.
+void ExSeven() // Пользователь вводит с клавиатуры M чисел. Посчитайте, сколько чисел больше 0 ввёл пользователь.
                // При этом пользователь не задает сколько чисел он введет (то есть число M), а подсчет количества
                // чисел производится после того, как пользователь не ввел информацию и нажал Enter."
 {
