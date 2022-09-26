@@ -83,8 +83,6 @@ bool ExInit(int exerciseNumber, int totalCount, string[] exerciseText) // выб
             case 3: { ExThree(); break; }
             case 4: { ExFour(); break; }
             case 5: { ExFive(); break; }
-            case 6: { ExSix(); break; }
-            case 7: { ExSeven(); break; }
         }
         Console.WriteLine("---End of Exercise---");
         return true;
@@ -118,55 +116,6 @@ int[,] CreateRandomIntegerTable(int rows, int cols, int min, int max)
     return table;
 }
 
-int[,] InputAndCreateRandomIntegerTable ()
-{
-    int rows = 0, cols = 0;
-    string exeptionMessage = "Только натуральные числа!";
-
-    Console.WriteLine("   Задайте размерность матрицы.");
-    rows = NaturalInputChecker("Укажите кол-во строк: " , exeptionMessage);
-    cols = NaturalInputChecker("Укажите кол-во столбцов: " , exeptionMessage);
-
-    Console.WriteLine("   Укажите диапазон значений элементов матрицы.");
-    Console.Write("Минимальное значение: ");
-    int min = InputChecker(exeptionMessage);
-    Console.Write("Максимальное значение: ");
-    int max = InputChecker(exeptionMessage);
-
-    return CreateRandomIntegerTable(rows, cols, min, max);
-}
-
-double[,] CreateRandomDoubleTable(int rows, int cols, double min, double max)
-{
-    if (max < min)  // проверка и защита
-    {
-        double temp = min;
-        min = max;
-        max = temp;
-    }
-
-    Random random = new Random();
-    double[,] table = new double[rows, cols];
-
-    for (int i = 0; i < rows; i++)
-        for (int j = 0; j < cols; j++)
-            table[i, j] = min + (max-min)*random.NextDouble(); // заполнение массива, не забывая, что справа плюс 1 к диапазону
-
-    return table;
-}
-
-void PrintDoubleTable(double[,] table, int precision)
-{
-    for (int i = 0; i < table.GetLength(0); i++)
-    {
-        for (int j = 0; j < table.GetLength(1); j++)
-        {
-            Console.Write(Math.Round(table[i, j],precision) + "\t");
-        }
-        Console.WriteLine();
-    }
-}
-
 void PrintIntTable(int[,] table)
 {
     Console.WriteLine("________________________");
@@ -196,84 +145,8 @@ void ArrayMinMaxSort (int[] array)
     }
 }
 
-void UnfoldTableToArray (int [,] table, int [] array)
-{
-    int n = 0; 
-   // int [] array = new int[table.GetLength(0) * table.GetLength(1)]; // по-хорошему надо для общего случая,
-                                                                       // когда мы не знаем , что на вход подаётся, но пока так оставлю.
-                                                                       // есть ощущение, что функции фолд и анфолд должны сами создавть
-                                                                       // массивы, что бы в основной программе не было этих операций...
-    for (int i = 0; i < table.GetLength(0); i++)
-        for (int j = 0; j < table.GetLength(1); j++)
-        {
-            array [n] = table[i,j];
-            n++;            
-        }
-    // return array;
-}
-
-void FoldArrayToTable (int [,] table, int [] array)
-{
-    int n = 0;
-    for (int i = 0; i < table.GetLength(0); i++)
-        for (int j = 0; j < table.GetLength(1); j++)
-        {
-            table[i,j] = array[n];
-            n++;            
-        }
-    // return table;
-}
-
-void TableMaxMinSort (int[,] table)
-{
-    int rows = table.GetLength(0), 
-        cols = table.GetLength(1); 
-
-    for (int m = 0; m < table.GetLength(0) * table.GetLength(1); m++) // все операции повторяем столько раз, сколько элементов в массиве 
-                                                                      // наверное, можно сократить в два раза, если одновременно отсеивать
-                                                                      // и минимальный и максимальный элемент в разные углы матрицы
-    {
-        int minPosI = 0, // позиции элемента, которые будем запоминать
-            minPosJ = 0;
-
-        for (int i = 0; i < rows; i++)  // теперь пробегаемся по массиву в поисках позиции элемента с минимальным значением
-        {
-            for (int j = 0; j < cols; j++) 
-            {
-                 if (table[i,j] < table[minPosI,minPosJ])
-                {
-                    minPosI = i;
-                    minPosJ = j;
-                } 
-            }
-        }
-       
-        int temp = table[rows-1,cols-1];  // свапаем последний элемент таблицы с минимальным, не забывая, что отсчёт массива начинается с нуля
-        table[rows-1,cols-1] = table [minPosI,minPosJ];
-        table[minPosI,minPosJ] = temp;
-
-        cols-=1; // убираем крайний правый элемент в строчке. В случае, если это был последний, тогда убираем нижнюю строчку
-        if (cols == 0)
-        {
-            cols = table.GetLength(1);
-            rows -= 1;
-        }
-    }
-
-       
-
-        
-}
-
 int Rows (int[,] table) => table.GetLength(0); // не плодите лишних сущностей, хехе...
 int Cols (int[,] table) => table.GetLength(1); // .... но так намного читабельнее для меня...
-
-
-void FillIntUnikRandom()
-{
-
-}
-
 
 // ЗАДАЧИ
 
@@ -437,112 +310,77 @@ void ExFive() // Напишите программу, которая запол�
     cols = NaturalInputChecker("Укажите кол-во столбцов: " , exeptionMessage);
     int[,] table = new int[rows,cols];
 
-
-    int power = rows*cols; // мощность таблицы
-    int direction = 1, // 1 - направо, 2 - вниз, 3 - налево, 4 - вверх
-        currentRow = 0,
+    int direction = 0, // 0 - направо, 1 - вниз, 2 - налево, 3 - вверх
+        currentRow = 0, // текущая строка и столбец
         currentCol = 0;
 
-   
+    int index = 1; // заполняем с 1, это наши числа, которые пойдут в спираль
 
-    int i = 1;
-    while (i <= rows*cols)
-    {
+    while (index <= rows*cols)
+    {        
+        direction %= 4; // каждый раз когда добавляем к "направлению" берём остаток от деления на 4, таким образом будем получать только одно из 4х значений
+        table[currentRow,currentCol] = index;
+        index++;
+       
+        // PrintIntTable(table); // отладка, проверка
+        // Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}, index = {index}");
+
         switch (direction)
         {
-            case 1: 
+            case 0: 
             {
-                if (currentCol < Cols(table) & table[currentRow,currentCol] == 0) 
+                if (currentCol < cols - 1) // к сожалению никак не получается в один if засунуть, не пойму, как можно и провекрку того, что мы в границах гнаходимся
+                    if (table[currentRow,currentCol + 1] == 0) // и прощупывание следующего элемента..
                     {
-                        table[currentRow,currentCol] = i;
-                        i++;
-                        if (currentCol < Cols(table)-1) currentCol++;
-                        else { currentRow++; direction++;}                        
-                    }
-            
-                else direction++;
-                PrintIntTable(table);
-                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                        currentCol++; 
+                        break;
+                    }                 
+                currentRow++; 
+                direction++;
                 break;
+            }
+            
+            case 1:
+            {
+                if (currentRow < rows - 1)
+                    if (table[currentRow + 1,currentCol] == 0) 
+                    {
+                        currentRow++;
+                        break;
+                    }               
+                currentCol--;
+                direction++;
+                break;
+
             }
             case 2:
             {
-                if (currentRow < Rows(table) & table[currentRow,currentCol] == 0) 
-                {
-                    table[currentRow,currentCol] = i;
-                    i++;
-                    if (currentRow < Rows(table)-1) currentRow++;
-                    else { currentCol--; direction++;}
-                }
-                else direction++;
-                PrintIntTable(table);
-                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                if (currentCol > 0 )
+                    if (table[currentRow,currentCol - 1] == 0)
+                    {
+                        currentCol--;
+                        break;
+                    }
+                currentRow--;
+                direction++;
                 break;
 
             }
             case 3:
             {
-                if (currentCol >= 0 & table[currentRow,currentCol] == 0) 
-                {
-                    table[currentRow,currentCol] = i;
-                    i++;
-                    if (currentCol > 0) currentCol--;
-                    else { currentRow--; direction++;}  
-                }
-                else direction++;
-                PrintIntTable(table);
-                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
+                if (currentRow > 0)
+                    if (table[currentRow - 1,currentCol] == 0) 
+                    {
+                        currentRow--;
+                        break;
+                    }
+                currentCol++; 
+                direction++;
                 break;
-
-            }
-            case 4:
-            {
-                if (currentRow >= 0 & table[currentRow,currentCol] == 0) 
-                {
-                    table[currentRow,currentCol] = i;
-                    i++;
-                    if (currentRow > 0) currentRow--;
-                    else { currentCol++; direction++;}
-                }
-                else direction++;
-                PrintIntTable(table);
-                Console.WriteLine($"currentCol = {currentCol}, currentRow = {currentRow}, direction = {direction}");
-                break;
-
-            }
-            default:
-            {
-                direction = 1;
-                break;
-            }
-          
-
+            }      
         }
-       
     }
-
-    
-        PrintIntTable(table);
-    
-
- 
-
-}
-
-void ExSix() // Сгенерировать массив случайных целых чисел размерностью m*n (размерность вводим с клавиатуры).
-             // Вывести на экран красивенько таблицей. Перемешать случайным образом элементы массива,
-             // причем чтобы каждый гарантированно переместился на другое место (возможно для этого
-             // удобно будет использование множества) и выполнить это за m*n / 2 итераций. То есть
-             // если массив три на четыре, то надо выполнить не более 6 итераций. И далее в конце
-             // опять вывести на экран как таблицу.",
-{
-
-}
-void ExSeven() // Пользователь вводит с клавиатуры M чисел. Посчитайте, сколько чисел больше 0 ввёл пользователь.
-               // При этом пользователь не задает сколько чисел он введет (то есть число M), а подсчет количества
-               // чисел производится после того, как пользователь не ввел информацию и нажал Enter."
-{
-
+    PrintIntTable(table);
 }
 
 // ГЛАВНЫЙ КОД НАЧИНАЕТСЯ ЗДЕСЬ
@@ -558,8 +396,6 @@ string[] exerciseList = {
                             "Задайте две матрицы. Напишите программу, которая будет находить произведение двух матриц.",
                             "Сформируйте трёхмерный массив из неповторяющихся двузначных чисел. Напишите программу, которая будет построчно выводить массив, добавляя индексы каждого элемента.",
                             "Напишите программу, которая заполнит спирально массив 4 на 4.",
-                            "(прошлое дз HARD) Сгенерировать массив случайных целых чисел размерностью m*n (размерность вводим с клавиатуры). Вывести на экран красивенько таблицей. Перемешать случайным образом элементы массива, причем чтобы каждый гарантированно переместился на другое место (возможно для этого удобно будет использование множества) и выполнить это за m*n / 2 итераций. То есть если массив три на четыре, то надо выполнить не более 6 итераций. И далее в конце опять вывести на экран как таблицу.",
-                            "(прошлое дз, попробовать Split()) Пользователь вводит с клавиатуры M чисел. Посчитайте, сколько чисел больше 0 ввёл пользователь. При этом пользователь не задает сколько чисел он введет (то есть число M), а подсчет количества чисел производится после того, как пользователь не ввел информацию и нажал Enter."
                         };
 
 // foreach (string text in exerciseList) Console.WriteLine(text);
