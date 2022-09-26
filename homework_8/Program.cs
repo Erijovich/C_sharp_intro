@@ -116,6 +116,24 @@ int[,] CreateRandomIntegerTable(int rows, int cols, int min, int max)
     return table;
 }
 
+int[,] InputAndCreateRandomIntegerTable ()
+{
+    int rows = 0, cols = 0;
+    string exeptionMessage = "Только натуральные числа!";
+
+    Console.WriteLine("Задайте размерность матрицы.");
+    rows = NaturalInputChecker("Укажите кол-во строк: " , exeptionMessage);
+    cols = NaturalInputChecker("Укажите кол-во столбцов: " , exeptionMessage);
+
+    Console.WriteLine("Укажите диапазон значений элементов матрицы.");
+    Console.Write("Минимальное значение: ");
+    int min = InputChecker(exeptionMessage);
+    Console.Write("Максимальное значение: ");
+    int max = InputChecker(exeptionMessage);
+
+    return CreateRandomIntegerTable(rows, cols, min, max);
+}
+
 void PrintIntTable(int[,] table)
 {
     Console.WriteLine("________________________");
@@ -205,10 +223,10 @@ void ExTwo() // Задайте прямоугольный двумерный м�
 
 void ExThree()  // Задайте две матрицы. Напишите программу, которая будет находить произведение двух матриц.
 {
-    int[,] tableOne = CreateRandomIntegerTable(2,3,-2,2); 
-    int[,] tableTwo = CreateRandomIntegerTable(2,2,-2,2); // маленькие значения легче проверять
-    // int[,] tableOne = InputAndCreateRandomIntegerTable(); // слишком долго вбивать значения
-    // int[,] tableTwo = InputAndCreateRandomIntegerTable();
+    // int[,] tableOne = CreateRandomIntegerTable(2,3,-2,2); 
+    // int[,] tableTwo = CreateRandomIntegerTable(2,2,-2,2); // маленькие значения легче проверять
+    int[,] tableOne = InputAndCreateRandomIntegerTable(); // слишком долго вбивать значения
+    int[,] tableTwo = InputAndCreateRandomIntegerTable();
     int[,] tableMulti = new int [Rows(tableOne), Cols(tableTwo)];
 
     Console.WriteLine("Первая матрица:"); 
